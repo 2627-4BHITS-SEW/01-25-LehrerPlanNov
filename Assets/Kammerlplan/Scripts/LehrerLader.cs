@@ -102,9 +102,15 @@ public class LehrerLader : MonoBehaviour
         // Die Adresse ergibt zusammen: https://www.htl-salzburg.ac.at/lehrerinnen.html
         UnityWebRequest anfrage = UnityWebRequest.Get(homepage + "/lehrerinnen.html");
 
+        // Testlog: Request-Start direkt vor dem Aufruf (Test 6)
+        Debug.Log("Request-Start: " + anfrage.url);
+
         // SendWebRequest() schickt die Anfrage ab.
         // "yield return" pausiert die Coroutine hier, bis die Antwort da ist.
         yield return anfrage.SendWebRequest();
+
+        // Testlog: URL, HTTP-Status und Ergebnis (Test 4)
+        Debug.Log("Übersicht: " + anfrage.url + " | HTTP " + anfrage.responseCode + " | " + anfrage.result);
 
         // Hat es geklappt? Ohne Internet oder bei einer falschen Adresse (z.B. 404) ist das nicht Success.
         if (anfrage.result != UnityWebRequest.Result.Success)
@@ -194,7 +200,11 @@ public class LehrerLader : MonoBehaviour
 
                 // Wieder pausieren, bis diese eine Seite da ist.
                 // Die Seiten werden also nacheinander geladen, nicht gleichzeitig.
+                Debug.Log("Request-Start: " + detail.url);
                 yield return detail.SendWebRequest();
+
+                // Testlog: URL, HTTP-Status und Ergebnis (Test 3)
+                Debug.Log("Detail: " + detail.url + " | HTTP " + detail.responseCode + " | " + detail.result);
 
                 // Schlägt nur diese eine Seite fehl, bricht nicht alles ab.
                 // Sprechstunde und Durchwahl bleiben dann einfach leer ("").
